@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>jwxt</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen">
+    <link th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}" rel="stylesheet" crossorigin="anonymous"/>
+    <script th:src="@{/webjars/font-awesome/5.15.1/js/all.min.js}" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:insert="~{/admin/indexAdmin::adminHead}"></div>
+<div id="layoutSidenav">
+    <div th:insert="~{/admin/indexAdmin::adminBody}"></div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <br>
+                <form th:action="@{/admin/updateCourse}" method="post">
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="course_id">ID</label>
+                            <input th:value="${course.getCourseID()}" type="text" class="form-control" id="course_id"
+                                   name="courseID" readonly="readonly">
+                        </div>
+                        <div class="col">
+                            <label for="course_name">课程名称</label>
+                            <input type="text" class="form-control" id="course_name" name="courseName"
+                                   th:value="${course.getCourseName()}" rerequired>
+                        </div>
+                        <div class="col">
+                            <label for="course_college">开课院系</label>
+                            <select id="course_college" class="form-control" name="collegeID" onblur="updateCourse()">
+                                <option th:selected="${course.getCollegeID()==curcollege.getCollegeID()}"
+                                        th:each="curcollege:${colleges}" th:text="${curcollege.getCollegeName()}"
+                                        th:value="${curcollege.getCollegeID()}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="course_teacher">授课教师</label>
+                            <select id="course_teacher" class="form-control" name="teacherID">
+                                <option selected th:value="${course.getTeacherID()}"
+                                        th:text="${teacher.getUserName()}"></option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="course_type">课程类型</label>
+                            <select id="course_type" class="form-control" name="courseType">
+                                <option th:selected="${course.getCourseType()==1}" value="1">必修</option>
+                                <option th:selected="${course.getCourseType()==0}" value="0">选修</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="course_room">上课地点</label>
+                            <input type="text" class="form-control" id="course_room" name="classRoom"
+                                   th:value="${course.getClassRoom()}" required>
+                        </div>
+                        <div class="col">
+                            <label for="course_time">上课时间</label>
+                            <select id="course_time" class="form-control" name="courseTime">
+                                <option th:selected="${course.getCourseTime()==1}" value="1">周一</option>
+                                <option th:selected="${course.getCourseTime()==2}" value="2">周二</option>
+                                <option th:selected="${course.getCourseTime()==3}" value="3">周三</option>
+                                <option th:selected="${course.getCourseTime()==4}" value="4">周四</option>
+                                <option th:selected="${course.getCourseTime()==5}" value="5">周五</option>
+                                <option th:selected="${course.getCourseTime()==6}" value="6">周六</option>
+                                <option th:selected="${course.getCourseTime()==7}" value="7">周日</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="course_week">课时</label>
+                            <input type="text" class="form-control" id="course_week" name="courseWeek"
+                                   th:value="${course.getCourseWeek()}"
+                                   oninput="if(value>20)value=20;value=value.replace(/[^\d]/g,'')" required>
+                        </div>
+                        <div class="col">
+                            <label for="course_score">学分</label>
+                            <input type="text" class="form-control" id="course_score" name="score"
+                                   th:value="${course.getScore()}"
+                                   oninput="if(value>15)value=15;value=value.replace(/[^\d]/g,'')" required>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="text-align: center">
+                        <button type="submit" class="btn btn-primary">修改</button>
+                        <a class="btn btn-warning" th:href="@{/admin/showCourse}">取消</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <div th:insert="/admin/indexAdmin::adminFooter"></div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/bootstrap/4.5.3/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/jquery.dataTables.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/dataTables.bootstrap4.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<script th:src="@{/js/datatables.js}"></script>
+<script th:src="@{/js/updateCourse.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.en-CA.js}"></script>
+<script th:src="@{/js/datetimepicker.js}"></script>
+</body>
+</html>

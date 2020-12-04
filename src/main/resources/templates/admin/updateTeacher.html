@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>jwxt</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen">
+    <link th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}" rel="stylesheet" crossorigin="anonymous"/>
+    <script th:src="@{/webjars/font-awesome/5.15.1/js/all.min.js}" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:insert="~{/admin/indexAdmin::adminHead}"></div>
+<div id="layoutSidenav">
+    <div th:insert="~{/admin/indexAdmin::adminBody}"></div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <br>
+                <form th:action="@{/admin/updateTeacher}" method="post">
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="teacher_id">ID</label>
+                            <input th:value="${teacher.getUserID()}" type="text" class="form-control" id="teacher_id"
+                                   name="userID" readonly="readonly">
+                        </div>
+                        <div class="col">
+                            <label for="teacher_name">姓名</label>
+                            <input th:value="${teacher.getUserName()}" type="text" class="form-control"
+                                   id="teacher_name"
+                                   name="userName" readonly="readonly">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="teacher_sex">性别</label>
+                            <select id="teacher_sex" class="form-control" name="sex">
+                                <option th:selected="${teacher.getSex()==1}" value="1">男</option>
+                                <option th:selected="${teacher.getSex()==0}" value="0">女</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="teacher_birth">生日</label>
+                            <div class="input-group date form_date " data-date="" data-date-format="yyyy/MM/dd"
+                                 data-link-field="teacher_birth" data-link-format="yyyy/MM/dd">
+                                <input class="form-control" type="text"
+                                       th:value="${#dates.format(teacher.getBirthYear(),'yyyy/MM/dd')}" name="birthYear"
+                                       readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                            <input type="hidden" id="teacher_birth" value=""/>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="teacher_degree">学历</label>
+                            <select id="teacher_degree" class="form-control" name="degree">
+                                <option th:selected="${teacher.getDegree()==1}" value="1">学士</option>
+                                <option th:selected="${teacher.getDegree()==2}" value="2">硕士</option>
+                                <option th:selected="${teacher.getDegree()==3}" value="3">博士</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="teacher_title">职称</label>
+                            <select id="teacher_title" class="form-control" name="title">
+                                <option th:selected="${teacher.getTitle()==1}" value="1">助教</option>
+                                <option th:selected="${teacher.getTitle()==2}" value="2">普通教师</option>
+                                <option th:selected="${teacher.getTitle()==3}" value="3">副教授</option>
+                                <option th:selected="${teacher.getTitle()==4}" value="4">教授</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="teacher_college">院系</label>
+                            <select id="teacher_college" class="form-control" name="collegeID">
+                                <option th:selected="${teacher.getCollegeID()==curcollege.getCollegeID()}"
+                                        th:each="curcollege:${colleges}" th:text="${curcollege.getCollegeName()}"
+                                        th:value="${curcollege.getCollegeID()}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="text-align: center">
+                        <button type="submit" class="btn btn-primary">修改</button>
+                        <a class="btn btn-warning" th:href="@{/admin/showTeacher}">取消</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <div th:insert="~{/admin/indexAdmin::adminFooter}"></div>
+    </div>
+</div>
+<script th:src="@{/webjars/jquery/3.5.1/jquery.slim.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/bootstrap/4.5.3/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/jquery.dataTables.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/dataTables.bootstrap4.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<script th:src="@{/js/datatables.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.en-CA.js}"></script>
+<script th:src="@{/js/datetimepicker.js}"></script>
+</body>
+</html>

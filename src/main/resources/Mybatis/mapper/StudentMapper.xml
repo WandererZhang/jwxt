@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhang.mapper.StudentMapper">
+    <!--查询语句-->
+    <resultMap id="queryStudent" type="Student">
+        <result property="userID" column="suid"/>
+        <result property="userName" column="sname"/>
+        <result property="studentNumber" column="snum"/>
+        <result property="sex" column="sex"/>
+        <result property="collegeID" column="scid"/>
+        <result property="grade" column="grade"/>
+        <result property="birthYear" column="sbirth"/>
+        <association property="college" javaType="College">
+            <result property="collegeID" column="scid"/>
+            <result property="collegeName" column="cname"/>
+        </association>
+    </resultMap>
+
+    <select id="queryStudentById" parameterType="Integer" resultMap="queryStudent">
+        select s.userID        suid,
+               s.userName      sname,
+               s.studentNumber snum,
+               s.sex           sex,
+               s.collegeID     scid,
+               s.grade         grade,
+               s.birthYear     sbirth,
+               c.collegeName   cname
+        from jwxt.student s
+                 left join jwxt.college c on s.collegeID = c.collegeID
+        where userID = #{userID}
+    </select>
+
+    <resultMap id="queryCourse" type="Course">
+        <result property="courseID" column="cid"/>
+        <result property="courseName" column="cname"/>
+        <result property="teacherID" column="tid"/>
+        <result property="courseTime" column="ctime"/>
+        <result property="classRoom" column="croom"/>
+        <result property="courseWeek" column="cweek"/>
+        <result property="courseType" column="ctype"/>
+        <result property="collegeID" column="ccid"/>
+        <result property="score" column="cscore"/>
+        <association property="college" javaType="College">
+            <result property="collegeID" column="ccid"/>
+            <result property="collegeName" column="c2name"/>
+        </association>
+        <association property="teacher" javaType="Teacher">
+            <result property="userID" column="tid"/>
+            <result property="userName" column="tname"/>
+        </association>
+    </resultMap>
+
+    <select id="querySelectCourseById" parameterType="Integer" resultMap="queryCourse">
+        select c.courseID     cid,
+               c.courseName   cname,
+               c.teacherID    tid,
+               c.courseTime   ctime,
+               c.classRoom    croom,
+               c.courseWeek   cweek,
+               c.courseType   ctype,
+               c.collegeID    ccid,
+               c.score        cscore,
+               c2.collegeName c2name,
+               t.userName     tname
+        from jwxt.course c
+                 left join (jwxt.selectedcourse sc left join jwxt.student s on sc.studentID = s.userID)
+                           on c.courseID = sc.courseID
+                 left join jwxt.college c2 on c.collegeID = c2.collegeID
+                 left join jwxt.teacher t on c.teacherID = t.userID
+        where studentID = #{studentID}
+          and mark is null;
+    </select>
+
+    <select id="queryNoCourseById" parameterType="Integer" resultMap="queryCourse">
+        select c.courseID     cid,
+               c.courseName   cname,
+               c.teacherID    tid,
+               c.courseTime   ctime,
+               c.classRoom    croom,
+               c.courseWeek   cweek,
+               c.courseType   ctype,
+               c.collegeID    ccid,
+               c.score        cscore,
+               c2.collegeName c2name,
+               t.userName     tname
+        from jwxt.course c
+                 left join jwxt.college c2 on c.collegeID = c2.collegeID
+                 left join jwxt.teacher t on c.teacherID = t.userID
+        where c.collegeID = #{collegeID}
+          and c.courseID not in (select courseID
+                                 from jwxt.selectedcourse s
+                                 where s.studentID = #{studentID});
+
+    </select>
+    <select id="queryIsSuccess" parameterType="SelectedCourse" resultType="Integer">
+        select count(*)
+        from jwxt.selectedcourse
+        where courseID = #{courseID}
+          and studentID = #{studentID}
+    </select>
+    <select id="queryIsFinish" parameterType="SelectedCourse" resultType="Integer">
+        select count(*)
+        from jwxt.selectedcourse
+        where courseID = #{courseID}
+          and studentID = #{studentID}
+          and mark is not null;
+    </select>
+    <insert id="addCourse" parameterType="SelectedCourse">
+        insert into jwxt.selectedcourse (courseID, studentID, mark)
+        values (#{courseID}, #{studentID}, null);
+    </insert>
+    <delete id="deleteCourse" parameterType="SelectedCourse">
+        delete
+        from jwxt.selectedcourse
+        where studentID = #{studentID}
+          and courseID = #{courseID};
+    </delete>
+
+    <resultMap id="queryFinishCourse" type="SelectedCourse">
+        <result property="courseID" column="cid"/>
+        <result property="studentID" column="ssid"/>
+        <result property="mark" column="mark"/>
+        <association property="course" javaType="Course">
+            <result property="courseID" column="cid"/>
+            <result property="courseName" column="cname"/>
+            <result property="courseType" column="ctype"/>
+            <result property="score" column="cscore"/>
+        </association>
+        <association property="teacher" javaType="Teacher">
+            <result property="userName" column="tname"/>
+            <result property="userID" column="tid"/>
+        </association>
+    </resultMap>
+
+    <select id="queryFinishCourseById" parameterType="Integer" resultMap="queryFinishCourse">
+        select sc.courseID  cid,
+               c.courseName cname,
+               t.userName   tname,
+               c.courseType ctype,
+               c.score      cscore,
+               sc.studentID ssid,
+               sc.mark      mark,
+               t.userID     tid
+        from jwxt.selectedcourse sc
+                 left join jwxt.course c on sc.courseID = c.courseID
+                 left join jwxt.teacher t on c.teacherID = t.userID
+        where sc.studentID = #{studentID}
+          and mark is not null;
+    </select>
+    <select id="queryUserById" parameterType="Integer" resultType="User">
+        select *
+        from jwxt.userlogin
+        where userName = #{userName};
+    </select>
+    <update id="updateUser" parameterType="User">
+        update jwxt.userlogin
+        set password = #{password}
+        where userID = #{userID};
+    </update>
+</mapper>

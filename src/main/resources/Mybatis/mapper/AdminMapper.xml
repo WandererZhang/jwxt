@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhang.mapper.AdminMapper">
+
+    <!--学生模块-->
+    <resultMap id="AllStudent" type="Student">
+        <result property="userID" column="suid"/>
+        <result property="userName" column="uname"/>
+        <result property="studentNumber" column="snum"/>
+        <result property="sex" column="ssex"/>
+        <result property="grade" column="sgr"/>
+        <result property="birthYear" column="sbirth"/>
+        <result property="collegeID" column="scid"/>
+        <association property="college" javaType="College">
+            <result property="collegeID" column="scid"/>
+            <result property="collegeName" column="cname"/>
+        </association>
+    </resultMap>
+    <select id="queryAllStudent" resultMap="AllStudent">
+        select s.userName      uname,
+               s.userID        suid,
+               s.studentNumber snum,
+               s.sex           ssex,
+               s.collegeID     scid,
+               s.grade         sgr,
+               s.birthYear     sbirth,
+               c.collegeName   cname
+        from jwxt.student s
+                 left join jwxt.college c
+                           on s.collegeID = c.collegeID
+    </select>
+    <select id="queryStudentById" parameterType="Integer" resultType="Student">
+        select *
+        from jwxt.student
+        where userID = #{userID}
+    </select>
+    <select id="queryAllCollege" resultType="College">
+        select *
+        from jwxt.college
+    </select>
+    <select id="queryCollegeById" parameterType="Integer" resultType="College">
+        select *
+        from jwxt.college
+        where collegeID = #{collegeID}
+    </select>
+    <insert id="addStudent" parameterType="Student">
+        insert into jwxt.student (userID, userName, studentNumber, sex, collegeID, grade, birthYear)
+        values (#{userID}, #{userName}, #{studentNumber}, #{sex}, #{collegeID}, #{grade}, #{birthYear})
+    </insert>
+    <update id="updateStudent" parameterType="Student">
+        update jwxt.student
+        set sex       = #{sex},
+            collegeID = #{collegeID},
+            birthYear = #{birthYear},
+            grade     = #{grade}
+        where userID = #{userID};
+    </update>
+    <delete id="deleteStudent" parameterType="Integer">
+        delete
+        from jwxt.student
+        where userID = #{userID};
+    </delete>
+
+    <!--用户模块-->
+    <select id="queryAllUser" resultType="User">
+        select *
+        from jwxt.userlogin
+        where role != 0;
+    </select>
+    <select id="queryUserById" parameterType="Integer" resultType="User">
+        select *
+        from jwxt.userlogin
+        where userID = #{userID};
+    </select>
+    <select id="queryUserByName" parameterType="String" resultType="User">
+        select *
+        from jwxt.userlogin
+        where userName = #{userName};
+    </select>
+    <insert id="addUser" parameterType="User">
+        insert into jwxt.userlogin (userID, userName, password, role)
+        values (#{userID}, #{userName}, #{password}, #{role});
+    </insert>
+    <update id="updateUser" parameterType="User">
+        update jwxt.userlogin
+        set password = #{password},
+            role     = #{role}
+        where userID = #{userID};
+    </update>
+    <delete id="deleteUser" parameterType="Integer">
+        delete
+        from jwxt.userlogin
+        where userID = #{userID};
+    </delete>
+
+    <!--教师模块-->
+    <resultMap id="AllTeacher" type="Teacher">
+        <result property="userID" column="tuid"/>
+        <result property="userName" column="tname"/>
+        <result property="sex" column="tsex"/>
+        <result property="birthYear" column="tbirth"/>
+        <result property="degree" column="tdegree"/>
+        <result property="title" column="title"/>
+        <result property="collegeID" column="tcid"/>
+        <association property="college" javaType="College">
+            <result property="collegeID" column="tcid"/>
+            <result property="collegeName" column="cname"/>
+        </association>
+    </resultMap>
+    <select id="queryAllTeacher" resultMap="AllTeacher">
+        select t.userID      tuid,
+               t.userName    tname,
+               t.sex         tsex,
+               t.birthYear   tbirth,
+               t.degree      tdegree,
+               t.title       title,
+               t.collegeID   tcid,
+               c.collegeName cname
+        from jwxt.teacher t
+                 left join jwxt.college c
+                           on t.collegeID = c.collegeID;
+    </select>
+    <select id="queryTeacherById" parameterType="Integer" resultType="Teacher">
+        select *
+        from jwxt.teacher
+        where userID = #{userID}
+    </select>
+    <insert id="addTeacher" parameterType="Teacher">
+        insert into jwxt.teacher (userID, userName, sex, birthYear, degree, title, collegeID)
+        values (#{userID}, #{userName}, #{sex}, #{birthYear}, #{degree}, #{title}, #{collegeID});
+    </insert>
+    <update id="updateTeacher" parameterType="Teacher">
+        update jwxt.teacher
+        set sex       = #{sex},
+            birthYear = #{birthYear},
+            degree    = #{degree},
+            title     = #{title},
+            collegeID = #{collegeID}
+        where userID = #{userID};
+    </update>
+    <delete id="deleteTeacher" parameterType="Integer">
+        delete
+        from jwxt.teacher
+        where userID = #{userID};
+    </delete>
+
+    <!--课程模块-->
+    <resultMap id="AllCourse" type="Course">
+        <result property="courseID" column="cid"/>
+        <result property="courseName" column="cname"/>
+        <result property="teacherID" column="tid"/>
+        <result property="courseTime" column="ctime"/>
+        <result property="classRoom" column="croom"/>
+        <result property="courseWeek" column="cweek"/>
+        <result property="courseType" column="ctype"/>
+        <result property="collegeID" column="lid"/>
+        <result property="score" column="cscore"/>
+        <association property="college" javaType="College">
+            <result property="collegeID" column="lid"/>
+            <result property="collegeName" column="lname"/>
+        </association>
+        <association property="teacher" javaType="Teacher">
+            <result property="userID" column="tid"/>
+            <result property="userName" column="tname"/>
+        </association>
+    </resultMap>
+    <select id="queryAllCourse" resultMap="AllCourse">
+        select c.courseID    cid,
+               c.courseName  cname,
+               c.teacherID   tid,
+               c.courseTime  ctime,
+               c.classRoom   croom,
+               c.courseWeek  cweek,
+               c.courseType  ctype,
+               c.collegeID   lid,
+               c.score       cscore,
+               t.userName    tname,
+               l.collegeName lname
+        from jwxt.course c
+                 left join jwxt.teacher t on c.teacherID = t.userID
+                 left join jwxt.college l on c.collegeID = l.collegeID;
+    </select>
+    <select id="queryCourseById" parameterType="Integer" resultType="Course">
+        select *
+        from jwxt.course
+        where courseID = #{courseID};
+    </select>
+    <select id="queryTeacherByCollege" parameterType="Integer" resultType="Teacher">
+        select *
+        from jwxt.teacher
+        where collegeID = #{collegeID};
+    </select>
+    <select id="countSelectedCourseById" parameterType="Integer" resultType="Integer">
+        select count(studentID)
+        from jwxt.selectedcourse
+        where courseID = #{courseID};
+    </select>
+    <insert id="addCourse" parameterType="Course">
+        insert into jwxt.course (courseID, courseName, teacherID, courseTime, classRoom, courseWeek, courseType,
+                                 collegeID, score)
+        values (#{courseID}, #{courseName}, #{teacherID}, #{courseTime}, #{classRoom}, #{courseWeek}, #{courseType},
+                #{collegeID}, #{score});
+    </insert>
+    <update id="updateCourse" parameterType="Course">
+        update jwxt.course
+        set courseName = #{courseName},
+            teacherID  = #{teacherID},
+            courseTime = #{courseTime},
+            classRoom  = #{classRoom},
+            courseWeek = #{courseWeek},
+            courseType = #{courseType},
+            score      = #{score},
+            collegeID  = #{collegeID}
+        where courseID = #{courseID};
+    </update>
+    <delete id="deleteCourse" parameterType="Integer">
+        delete
+        from jwxt.course
+        where courseID = #{courseID};
+    </delete>
+</mapper>

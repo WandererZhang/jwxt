@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhang.mapper.UserMapper">
+    <!--查询语句-->
+    <!--通过用户名查询User-->
+    <resultMap id="UserRole" type="User">
+        <result property="userID" column="uid"/>
+        <result property="userName" column="uname"/>
+        <result property="password" column="upwd"/>
+        <result property="role" column="urole"/>
+        <association property="role_db" javaType="Role">
+            <result property="roleID" column="urole"/>
+            <result property="roleName" column="rname"/>
+            <result property="permissions" column="rpermission"/>
+        </association>
+    </resultMap>
+
+    <select id="queryUserByName" parameterType="String" resultMap="UserRole">
+        select u.userID uid, u.userName uname, u.password upwd, u.role urole, r.roleName rname, r.permissions rpermission
+        from jwxt.userlogin u left join jwxt.role r
+        on r.roleID = u.role
+        where u.userName = #{userName};
+    </select>
+</mapper>

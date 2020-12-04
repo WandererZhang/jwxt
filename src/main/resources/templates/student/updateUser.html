@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>jwxt</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen">
+    <link th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}" rel="stylesheet" crossorigin="anonymous"/>
+    <script th:src="@{/webjars/font-awesome/5.15.1/js/all.min.js}" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:insert="~{/student/indexStudent::adminHead}"></div>
+<div id="layoutSidenav">
+    <div th:insert="~{/student/indexStudent::adminBody}"></div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <br>
+                <p style="color: #b61e2f" th:text="${msg}" th:if="${!#strings.isEmpty(msg)}"></p>
+                <br>
+                <form th:action="@{/student/updateUser}" method="post">
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="user_id">ID</label>
+                            <input th:value="${user.getUserID()}" type="text" class="form-control" id="user_id"
+                                   name="userID" readonly>
+                        </div>
+                        <div class="col">
+                            <label for="user_name">用户名</label>
+                            <input th:value="${user.getUserName()}" type="text" class="form-control" id="user_name"
+                                   name="userName" readonly>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="user_role">权限</label>
+                        <select id="user_role" class="form-control" name="role" disabled>
+                            <option th:selected="${user.getRole()==2}" value="2">学生</option>
+                            <option th:selected="${user.getRole()==1}" value="1">老师</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="user_pwd">请输入新密码: </label>
+                        <input type="password" class="form-control" id="user_pwd"
+                               name="password" oninput="if(value.length>15)value=value.slice(6,15)"
+                               placeholder="密码长度为6到15位" required>
+                    </div>
+                    <br>
+                    <div>
+                        <button type="submit" class="btn btn-primary">修改</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <div th:insert="~{/student/indexStudent::adminFooter}"></div>
+    </div>
+</div>
+<script th:src="@{/webjars/jquery/3.5.1/jquery.slim.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/bootstrap/4.5.3/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/jquery.dataTables.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/dataTables.bootstrap4.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<script th:src="@{/js/datatables.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.en-CA.js}"></script>
+<script th:src="@{/js/datetimepicker.js}"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>jwxt</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen">
+    <link th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}" rel="stylesheet" crossorigin="anonymous"/>
+    <script th:src="@{/webjars/font-awesome/5.15.1/js/all.min.js}" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:insert="~{/teacher/indexTeacher::adminHead}"></div>
+<div id="layoutSidenav">
+    <div th:insert="~{/teacher/indexTeacher::adminBody}"></div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <br>
+                <form th:action="@{/teacher/addCourse}" method="post">
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="course_name">课程名称</label>
+                            <input type="text" class="form-control" id="course_name" name="courseName"
+                                   placeholder="Name"
+                                   required>
+                        </div>
+                        <div class="col">
+                            <label for="course_college">开课院系</label>
+                            <select id="course_college" class="form-control" name="collegeID">
+                                <option th:selected="${teacher.getCollegeID()}"
+                                        th:text="${teacher.getCollege().getCollegeName()}"
+                                        th:value="${teacher.getCollegeID()}" readonly></option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="course_teacher">授课教师</label>
+                            <select id="course_teacher" class="form-control" name="teacherID">
+                                <option th:value="${teacher.getUserID()}" th:selected="${teacher.getUserName()}"
+                                        th:text="${teacher.getUserName()}" readonly></option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="course_type">课程类型</label>
+                            <select id="course_type" class="form-control" name="courseType">
+                                <option selected value="1">必修</option>
+                                <option value="0">选修</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="course_room">上课地点</label>
+                            <input type="text" class="form-control" id="course_room" name="classRoom"
+                                   required>
+                        </div>
+                        <div class="col">
+                            <label for="course_time">上课时间</label>
+                            <select id="course_time" class="form-control" name="courseTime">
+                                <option selected value="1">周一</option>
+                                <option value="2">周二</option>
+                                <option value="3">周三</option>
+                                <option value="4">周四</option>
+                                <option value="5">周五</option>
+                                <option value="6">周六</option>
+                                <option value="7">周日</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="course_week">课时</label>
+                            <input type="text" class="form-control" id="course_week" name="courseWeek"
+                                   oninput="if(value>20)value=20;value=value.replace(/[^\d]/g,'')" required>
+                        </div>
+                        <div class="col">
+                            <label for="course_score">学分</label>
+                            <input type="text" class="form-control" id="course_score" name="score"
+                                   oninput="if(value>15)value=15;value=value.replace(/[^\d]/g,'')" required>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="text-align: center">
+                        <button type="submit" class="btn btn-primary">添加</button>
+                        <a class="btn btn-warning" th:href="@{/teacher/showCourse}">取消</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <div th:insert="/teacher/indexTeacher::adminFooter"></div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/bootstrap/4.5.3/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/jquery.dataTables.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/dataTables.bootstrap4.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<script th:src="@{/js/datatables.js}"></script>
+<script th:src="@{/js/addCourse.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.en-CA.js}"></script>
+<script th:src="@{/js/datetimepicker.js}"></script>
+</body>
+</html>

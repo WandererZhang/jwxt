@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>jwxt</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen">
+    <link th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}" rel="stylesheet" crossorigin="anonymous"/>
+    <script th:src="@{/webjars/font-awesome/5.15.1/js/all.min.js}" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:insert="~{/admin/indexAdmin::adminHead}"></div>
+<div id="layoutSidenav">
+    <div th:insert="~{/admin/indexAdmin::adminBody}"></div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <br>
+                <form th:action="@{/admin/addStudent}" method="post">
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="student_name">姓名</label>
+                            <input type="text" class="form-control" id="student_name" name="userName" placeholder="Name"
+                                   required>
+                        </div>
+                        <div class="col">
+                            <label for="studentNumber">学号</label>
+                            <input type="text" class="form-control" id="studentNumber" name="studentNumber"
+                                   oninput="value=value.replace(/[^\d]/g,'')"
+                                   placeholder="studentNumber" required>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="student_gender">性别</label>
+                            <select id="student_gender" class="form-control" name="sex">
+                                <option selected value="1">男</option>
+                                <option value="0">女</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="student_birth">生日</label>
+                            <div class="input-group date form_date " data-date="" data-date-format="yyyy/MM/dd"
+                                 data-link-field="student_birth" data-link-format="yyyy/MM/dd">
+                                <input class="form-control" type="text" value="" name="birthYear" readonly required>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span
+                                        class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                            <input type="hidden" id="student_birth" value=""/>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="student_grade">年级</label>
+                        <select id="student_grade" class="form-control" name="grade">
+                            <option selected value="1">大一</option>
+                            <option value="2">大二</option>
+                            <option value="3">大三</option>
+                            <option value="4">大四</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="student_classes">院系</label>
+                        <select id="student_classes" class="form-control" name="collegeID">
+                            <option th:selected="${curcollege.getCollegeID()==1}"
+                                    th:each="curcollege:${colleges}" th:text="${curcollege.getCollegeName()}"
+                                    th:value="${curcollege.getCollegeID()}"></option>
+                        </select>
+                    </div>
+                    <br>
+                    <div style="text-align: center">
+                        <button type="submit" class="btn btn-primary">添加</button>
+                        <a class="btn btn-warning" th:href="@{/admin/showStudent}">取消</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <div th:insert="/admin/indexAdmin::adminFooter"></div>
+    </div>
+</div>
+<script th:src="@{/webjars/jquery/3.5.1/jquery.slim.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/bootstrap/4.5.3/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/jquery.dataTables.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/dataTables.bootstrap4.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<script th:src="@{/js/datatables.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.en-CA.js}"></script>
+<script th:src="@{/js/datetimepicker.js}"></script>
+</body>
+</html>

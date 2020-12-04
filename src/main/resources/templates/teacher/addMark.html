@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>jwxt</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen">
+    <link th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}" rel="stylesheet" crossorigin="anonymous"/>
+    <script th:src="@{/webjars/font-awesome/5.15.1/js/all.min.js}" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div th:insert="~{/teacher/indexTeacher::adminHead}"></div>
+<div id="layoutSidenav">
+    <div th:insert="~{/teacher/indexTeacher::adminBody}"></div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <br>
+                <form th:action="@{/teacher/addMark}" method="post">
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="course_ID">课程ID</label>
+                            <input type="text" class="form-control" id="course_ID" name="courseID"
+                                   th:value="${selectedCourse.getCourseID()}" readonly>
+                        </div>
+                        <div class="col">
+                            <label for="course_name">课程名</label>
+                            <input type="text" class="form-control" id="course_name"
+                                   th:value="${selectedCourse.getCourse().getCourseName()}" readonly>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="student_id">学生ID</label>
+                            <input type="text" class="form-control" id="student_id" name="studentID"
+                                   th:value="${selectedCourse.getStudentID()}" readonly>
+                        </div>
+                        <div class="col">
+                            <label for="student_name">学生姓名</label>
+                            <input type="text" class="form-control" id="student_name"
+                                   th:value="${selectedCourse.getStudent().getUserName()}" readonly>
+                        </div>
+                        <div class="col">
+                            <label for="student_num">学号</label>
+                            <input type="text" class="form-control" id="student_num"
+                                   th:value="${selectedCourse.getStudent().getStudentNumber()}" readonly>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="course_mark">分数</label>
+                        <input type="text" class="form-control" id="course_mark"
+                               oninput="if(value>100)value=100;if(value<0)value=0;value=value.replace(/[^\d]/g,'')" name="mark" required>
+                    </div>
+                    <br>
+                    <div style="text-align: center">
+                        <button type="submit" class="btn btn-primary">添加</button>
+                        <a class="btn btn-warning" th:href="@{'/teacher/showMark?id='+${selectedCourse.getCourseID()}}">取消</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <div th:insert="/teacher/indexTeacher::adminFooter"></div>
+    </div>
+</div>
+<script th:src="@{/webjars/jquery/3.5.1/jquery.slim.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/bootstrap/4.5.3/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/jquery.dataTables.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/webjars/datatables/1.10.20/media/js/dataTables.bootstrap4.min.js}" crossorigin="anonymous"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<script th:src="@{/js/datatables.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.en-CA.js}"></script>
+<script th:src="@{/js/datetimepicker.js}"></script>
+</body>
+</html>

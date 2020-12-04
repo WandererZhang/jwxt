@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhang.mapper.TeacherMapper">
+
+    <resultMap id="queryTeacher" type="Teacher">
+        <result property="userID" column="tid"/>
+        <result property="userName" column="tname"/>
+        <result property="sex" column="tsex"/>
+        <result property="birthYear" column="tbirth"/>
+        <result property="degree" column="tdegree"/>
+        <result property="title" column="ttitle"/>
+        <result property="collegeID" column="tcid"/>
+        <association property="college" javaType="College">
+            <result property="collegeID" column="tcide"/>
+            <result property="collegeName" column="cname"/>
+        </association>
+    </resultMap>
+
+    <select id="queryTeacherById" parameterType="Integer" resultMap="queryTeacher">
+        select t.userID      tid,
+               t.userName    tname,
+               t.sex         tsex,
+               t.birthYear   tbirth,
+               t.degree      tdegree,
+               t.title       ttitle,
+               t.collegeID   tcid,
+               c.collegeName cname
+        from jwxt.teacher t
+                 left join jwxt.college c on t.collegeID = c.collegeID
+        where userID = #{userID}
+    </select>
+
+    <resultMap id="AllCourse" type="Course">
+        <result property="courseID" column="cid"/>
+        <result property="courseName" column="cname"/>
+        <result property="teacherID" column="tid"/>
+        <result property="courseTime" column="ctime"/>
+        <result property="classRoom" column="croom"/>
+        <result property="courseWeek" column="cweek"/>
+        <result property="courseType" column="ctype"/>
+        <result property="collegeID" column="lid"/>
+        <result property="score" column="cscore"/>
+        <association property="college" javaType="College">
+            <result property="collegeID" column="lid"/>
+            <result property="collegeName" column="lname"/>
+        </association>
+        <association property="teacher" javaType="Teacher">
+            <result property="userID" column="tid"/>
+            <result property="userName" column="tname"/>
+        </association>
+    </resultMap>
+    <select id="queryCourseById" parameterType="Integer" resultMap="AllCourse">
+        select c.courseID    cid,
+               c.courseName  cname,
+               c.teacherID   tid,
+               c.courseTime  ctime,
+               c.classRoom   croom,
+               c.courseWeek  cweek,
+               c.courseType  ctype,
+               c.collegeID   lid,
+               c.score       cscore,
+               t.userName    tname,
+               l.collegeName lname
+        from jwxt.course c
+                 left join jwxt.teacher t on c.teacherID = t.userID
+                 left join jwxt.college l on c.collegeID = l.collegeID
+        where teacherID = #{teacherID};
+    </select>
+    <select id="queryAllCollege" resultType="College">
+        select *
+        from jwxt.college
+    </select>
+    <select id="queryCourseByCourseId" parameterType="Integer" resultType="Course">
+        select *
+        from jwxt.course
+        where courseID = #{courseID};
+    </select>
+    <insert id="addCourse" parameterType="Course">
+        insert into jwxt.course (courseID, courseName, teacherID, courseTime, classRoom, courseWeek, courseType,
+                                 collegeID, score)
+        values (#{courseID}, #{courseName}, #{teacherID}, #{courseTime}, #{classRoom}, #{courseWeek}, #{courseType},
+                #{collegeID}, #{score})
+    </insert>
+    <update id="updateCourse" parameterType="Course">
+        update jwxt.course
+        set courseName = #{courseName},
+            teacherID  = #{teacherID},
+            courseTime = #{courseTime},
+            classRoom  = #{classRoom},
+            courseWeek = #{courseWeek},
+            courseType = #{courseType},
+            score      = #{score},
+            collegeID  = #{collegeID}
+        where courseID = #{courseID};
+    </update>
+
+    <resultMap id="MarkCourse" type="SelectedCourse">
+        <result property="courseID" column="mcid"/>
+        <result property="studentID" column="msid"/>
+        <result property="mark" column="mark"/>
+        <association property="student" javaType="Student">
+            <result property="userID" column="msid"/>
+            <result property="userName" column="sname"/>
+            <result property="studentNumber" column="snum"/>
+        </association>
+        <association property="course" javaType="Course">
+            <result property="courseID" column="mcid"/>
+            <result property="courseName" column="cname"/>
+        </association>
+    </resultMap>
+
+    <select id="queryMarkByCourseID" parameterType="Integer" resultMap="MarkCourse">
+        select m.courseID mcid, m.studentID msid, m.mark mark, s.userName sname, s.studentNumber snum, c.courseName cname
+        from jwxt.selectedcourse m left join jwxt.student s on m.studentID = s.userID left join jwxt.course c on m.courseID = c.courseID
+        where m.courseID = #{courseID};
+    </select>
+
+    <select id="queryMarkID" parameterType="Integer" resultMap="MarkCourse">
+        select m.courseID mcid, m.studentID msid, m.mark mark, s.userName sname, s.studentNumber snum, c.courseName cname
+        from jwxt.selectedcourse m left join jwxt.student s on m.studentID = s.userID left join jwxt.course c on m.courseID = c.courseID
+        where m.courseID = #{courseID} and m.studentID = #{studentID};
+    </select>
+
+    <update id="addMark" parameterType="SelectedCourse">
+        update jwxt.selectedcourse set mark = #{mark} where courseID = #{courseID} and studentID = #{studentID};
+    </update>
+    <select id="queryUserById" parameterType="Integer" resultType="User">
+        select * from jwxt.userlogin where userName = #{userName};
+    </select>
+    <update id="updateUser" parameterType="User">
+        update jwxt.userlogin set password = #{password} where userID = #{userID};
+    </update>
+</mapper>
