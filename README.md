@@ -22,6 +22,7 @@ ORM框架：Mybatis
 ## 初始化
 * 在Mysql中，创建一个数据库名称为jwxt的数据库，并导入SQL目录下的.sql 文件
 * 使用 IntelliJ IDEA 导入Maven项目
+* 下载css文件放到src/main/resources/static/css目录下（链接：https://pan.baidu.com/s/18VWV8xxKDqVnACQh2dJBeQ 提取码：aw1c）
 * 在application.properties中配置数据库
 * 运行
 
